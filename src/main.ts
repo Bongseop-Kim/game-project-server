@@ -32,6 +32,7 @@ async function bootstrap() {
   app.enableCors({
     origin: true,
     //원하는 주소만 origin에 입력하여 접속을 허락
+    //cors 에러
     credentials: true,
   });
 
