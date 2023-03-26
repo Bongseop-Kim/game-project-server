@@ -37,6 +37,32 @@ export class User extends Document {
   @IsNotEmpty()
   name: string;
 
+  @ApiProperty({
+    example: 1,
+    description: 'strong',
+    required: true,
+  })
+  @Prop({
+    default: 1,
+    required: true,
+  })
+  @IsString()
+  @IsNotEmpty()
+  strong: number;
+
+  @ApiProperty({
+    example: 8,
+    description: 'money',
+    required: true,
+  })
+  @Prop({
+    default: 1,
+    required: true,
+  })
+  @IsString()
+  @IsNotEmpty()
+  money: number;
+
   @Prop({
     required: true,
   })
@@ -48,6 +74,8 @@ export class User extends Document {
     id: string;
     email: string;
     name: string;
+    strong: number;
+    money: number;
   };
 }
 
@@ -59,6 +87,8 @@ _UsersSchema.virtual('readOnlyData').get(function (this: User) {
     id: this.id,
     email: this.email,
     name: this.name,
+    strong: this.strong,
+    money: this.money,
   };
 });
 
