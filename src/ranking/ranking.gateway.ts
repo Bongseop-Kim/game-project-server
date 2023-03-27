@@ -16,8 +16,11 @@ export class RankingGateway {
 
   constructor(private readonly usersRepository: UsersRepository) {}
 
-  handleConnection(@ConnectedSocket() socket: Socket) {
+  async handleConnection(@ConnectedSocket() socket: Socket) {
     //socket 접속시
+
+    const allUser = await this.usersRepository.findAll();
+    this.server.emit('update_users', allUser);
     this.logger.log(`connected: ${socket.id} ${socket.nsp.name}`);
   }
   async handleDisconnect(@ConnectedSocket() socket: Socket) {
