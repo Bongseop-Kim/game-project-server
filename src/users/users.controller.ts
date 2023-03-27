@@ -30,7 +30,7 @@ export class UsersController {
   @ApiOperation({ summary: '현재 user 가져오기' })
   @UseGuards(JwtAuthGuard)
   @Get()
-  getCurrentCat(@CurrentUser() user) {
+  getCurrentUser(@CurrentUser() user) {
     //@Currentuser처럼 custom 데코레이터를 사용하는 이유
     //@Req는 사용하면 결합도가 높아지기 때문에 최대한 사용을 지양하고 사용해야할 시 custom decorator를 사용하는 것이 좋다.
     //바꾸기도 어렵고 테스트 하기도 어렵다

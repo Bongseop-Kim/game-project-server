@@ -4,12 +4,14 @@ import {
   MessageBody,
   SubscribeMessage,
   WebSocketGateway,
+  WebSocketServer,
 } from '@nestjs/websockets';
-import { Socket } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { UsersRepository } from 'src/users/users.repository';
 
 @WebSocketGateway({ cors: true })
 export class RankingGateway {
+  @WebSocketServer() server: Server;
   private logger = new Logger('ranking');
 
   constructor(private readonly usersRepository: UsersRepository) {}
@@ -27,12 +29,16 @@ export class RankingGateway {
     // this.logger.log('init');
   }
 
-  @SubscribeMessage('user_connected')
-  async userConnect(
-    @MessageBody() name: string,
-    @ConnectedSocket() socket: Socket,
-  ) {
-    socket.broadcast.emit('new_chat', name);
-    return name;
+  @SubscribeMessage('plusMoney')
+  async plusMoney(@MessageBody() array, @ConnectedSocket() socket: Socket) {
+    await this.usersRepository.plusMoney(array[0], array[1]);
+
+    const user = await this.usersRepository.findUserByIdWithoutPassword(
+      array[0],
+    );
+    socket.emit('current_user', user);
+
+    const allUser = await this.usersRepository.findAll();
+    this.server.emit('update_users', allUser);
   }
 }

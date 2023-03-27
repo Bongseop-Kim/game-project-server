@@ -31,7 +31,22 @@ export class UsersRepository {
   async findUserByIdWithoutPassword(
     userId: string | Types.ObjectId,
   ): Promise<User | null> {
-    const user = await this.userModel.findById(userId).select('email name');
+    const user = await this.userModel.findById(userId);
     return user;
+  }
+
+  async findAll() {
+    const result = await this.userModel.find();
+    return result;
+  }
+
+  async plusMoney(id: string, money: number) {
+    try {
+      const user = await this.userModel.findById(id);
+      user.money += money;
+      return await user.save();
+    } catch (error) {
+      console.log('error');
+    }
   }
 }

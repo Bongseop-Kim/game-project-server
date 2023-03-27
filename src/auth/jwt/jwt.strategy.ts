@@ -15,12 +15,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: Payload) {
-    const cat = await this.usersRepository.findUserByIdWithoutPassword(
+    const user = await this.usersRepository.findUserByIdWithoutPassword(
       payload.sub,
     );
 
-    if (cat) {
-      return cat; //request.user
+    if (user) {
+      return user; //request.user
     } else {
       throw new UnauthorizedException('접근 오류');
     }
