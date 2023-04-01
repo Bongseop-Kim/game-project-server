@@ -19,7 +19,7 @@ export class RankingGateway {
   async handleConnection(@ConnectedSocket() socket: Socket) {
     //socket 접속시
 
-    const allUser = await this.usersRepository.findAll();
+    const allUser = await this.usersRepository.findTopTenUsers();
     this.server.emit('update_users', allUser);
     this.logger.log(`connected: ${socket.id} ${socket.nsp.name}`);
   }
@@ -33,15 +33,17 @@ export class RankingGateway {
   }
 
   @SubscribeMessage('plusMoney')
-  async plusMoney(@MessageBody() array, @ConnectedSocket() socket: Socket) {
-    await this.usersRepository.plusMoney(array[0], array[1]);
+  async plusMoney(@MessageBody() body, @ConnectedSocket() socket: Socket) {
+    await this.usersRepository.plusMoney(body.id, body.money);
 
+    // 1. 자기 자신의 mony를 증가
     const user = await this.usersRepository.findUserByIdWithoutPassword(
-      array[0],
+      body.id,
     );
     socket.emit('current_user', user);
 
-    const allUser = await this.usersRepository.findAll();
+    // 2. 모든 유저들에게 money가 update된 모든 유저들을 보내준다.
+    const allUser = await this.usersRepository.findTopTenUsers();
     this.server.emit('update_users', allUser);
   }
 }

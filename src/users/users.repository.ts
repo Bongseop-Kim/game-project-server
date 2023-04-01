@@ -35,8 +35,8 @@ export class UsersRepository {
     return user;
   }
 
-  async findAll() {
-    const result = await this.userModel.find();
+  async findTopTenUsers() {
+    const result = await this.userModel.find().sort({ money: -1 }).limit(10);
     return result;
   }
 
