@@ -46,4 +46,19 @@ export class RankingGateway {
     const allUser = await this.usersRepository.findTopTenUsers();
     this.server.emit('update_users', allUser);
   }
+
+  @SubscribeMessage('buyTool')
+  async buyTool(@MessageBody() body, @ConnectedSocket() socket: Socket) {
+    const user = await this.usersRepository.buyTool(
+      body.strong,
+      body.money,
+      body.id,
+    );
+    if (!user) {
+      return 'error';
+    }
+    socket.emit('current_user', user);
+    const allUser = await this.usersRepository.findTopTenUsers();
+    this.server.emit('update_users', allUser);
+  }
 }

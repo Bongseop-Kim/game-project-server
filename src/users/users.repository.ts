@@ -49,4 +49,13 @@ export class UsersRepository {
       console.log('error');
     }
   }
+
+  async buyTool(strong: number, money: number, id: string) {
+    const user = await this.userModel.findById(id);
+    if (user.money > money) {
+      user.money -= money;
+      user.strong += strong;
+      return await user.save();
+    }
+  }
 }
