@@ -36,8 +36,7 @@ export class UsersRepository {
   }
 
   async findTopTenUsers() {
-    const result = await this.userModel.find().sort({ money: -1 }).limit(10);
-    return result;
+    return await this.userModel.find().sort({ money: -1 }).limit(10);
   }
 
   async plusMoney(id: string, money: number) {
@@ -46,7 +45,7 @@ export class UsersRepository {
       user.money += money;
       return await user.save();
     } catch (error) {
-      console.log('error');
+      throw new HttpException('db error : 해당 하는 유저 없음', 400);
     }
   }
 
@@ -56,6 +55,8 @@ export class UsersRepository {
       user.money -= money;
       user.strong += strong;
       return await user.save();
+    } else {
+      throw new HttpException('돈이 부족합니다.', 400);
     }
   }
 }

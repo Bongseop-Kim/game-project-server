@@ -59,4 +59,22 @@ export class UsersController {
   logIn(@Body() data: LoginRequestDto) {
     return this.authService.jwtLogIn(data);
   }
+
+  @ApiOperation({ summary: '유저 money +' })
+  @Post('plusMoney')
+  async plusMoney(@Body() body) {
+    return await this.usersService.plustMoney(body);
+  }
+
+  @ApiOperation({ summary: '유저 money -, strong +' })
+  @Post('buyTool')
+  async buyTool(@Body() body) {
+    return await this.usersService.buyTool(body);
+  }
+
+  @ApiOperation({ summary: '상위 10명 유저 가져오기' })
+  @Get('getTopTenUsers')
+  async getTopTenUsers() {
+    return await this.usersService.getTopTenUsers();
+  }
 }

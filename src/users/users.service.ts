@@ -26,4 +26,23 @@ export class UsersService {
     // 전달해 주고 싶은 데이터만 전달하기 위해 virtual을 이용한 가상의 readOnlyData를 보내준다.
     return user.readOnlyData;
   }
+
+  async plustMoney(body) {
+    const { id, money } = body;
+
+    const user = await this.usersRepository.plusMoney(id, money);
+    return user;
+  }
+
+  async buyTool(body) {
+    const { strong, money, id } = body;
+
+    const user = await this.usersRepository.buyTool(strong, money, id);
+    return user;
+  }
+
+  async getTopTenUsers() {
+    const tenUsers = await this.usersRepository.findTopTenUsers();
+    return tenUsers;
+  }
 }
