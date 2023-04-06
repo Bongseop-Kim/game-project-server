@@ -36,7 +36,10 @@ export class UsersRepository {
   }
 
   async findTopTenUsers() {
-    return await this.userModel.find().sort({ money: -1 }).limit(10);
+    return await this.userModel
+      .find({}, { name: 1, money: 1 })
+      .sort({ money: -1 })
+      .limit(10);
   }
 
   async plusMoney(id: string, money: number) {

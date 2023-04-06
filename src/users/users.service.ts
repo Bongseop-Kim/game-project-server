@@ -31,14 +31,14 @@ export class UsersService {
     const { id, money } = body;
 
     const user = await this.usersRepository.plusMoney(id, money);
-    return user;
+    return user.readOnlyData;
   }
 
   async buyTool(body) {
     const { strong, money, id } = body;
 
     const user = await this.usersRepository.buyTool(strong, money, id);
-    return user;
+    return user.readOnlyData;
   }
 
   async getTopTenUsers() {
